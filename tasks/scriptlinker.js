@@ -21,7 +21,8 @@ module.exports = function(grunt) {
 			startTag: '<!--SCRIPTS-->',
 			endTag: '<!--SCRIPTS END-->',
 			fileTmpl: '<script src="%s"></script>',
-			appRoot: ''
+			appRoot: '',
+            cdn: ''
 		});
 
 
@@ -41,6 +42,13 @@ module.exports = function(grunt) {
 						return false;
 					} else { return true; }
 				}).map(function (filepath) {
+                    // If "relative" option is set, remove initial forward slash from file path
+                    if (options.relative) {
+                        filepath = filepath.replace(/^\//,'');
+                    }
+                    if (options.cdn) {
+                        filepath = options.cdn + filepath;
+                    }
 					return util.format(options.fileTmpl, filepath.replace(options.appRoot, ''));
 				});
 
